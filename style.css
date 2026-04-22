@@ -110,3 +110,34 @@ body {
   align-self: flex-start;
   border-radius: 10px 10px 3px 10px;
 }
+
+.welcome-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.option-btn {
+  background: #ffffff;
+  color: #161616;
+  border: 1.5px solid #161616;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background 0.2s, color 0.2s;
+}
+
+.option-btn:hover {
+  background: #4b5c66; 
+  color: #ffffff;
+}
+
+.recommended-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #4b5c66;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

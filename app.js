@@ -48,3 +48,28 @@ const setScrollPosition = () => {
     chatBody.scrollTop = chatBody.scrollHeight;
   }
 };
+
+const renderWelcomeMessage = () => {
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("chatbot-message", "welcome-wrapper");
+
+  const text = document.createTextNode("Hi! How can I help you today?");
+  wrapper.append(text);
+
+  const recommended = document.createElement("span");
+  recommended.classList.add("recommended-label");
+  recommended.textContent = "Recommended";
+  wrapper.append(recommended);
+
+  const btn = document.createElement("button");
+  btn.classList.add("option-btn");
+  btn.textContent = "Receive notifications";
+  btn.addEventListener("click", () => {
+    // funcionalidad próxima
+  });
+
+  wrapper.append(btn);
+  chatBody.append(wrapper);
+};
+
+renderWelcomeMessage();
