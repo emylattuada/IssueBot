@@ -2,74 +2,122 @@ const chatBody = document.querySelector(".chat-body");
 const txtInput = document.querySelector("#txtInput");
 const send = document.querySelector(".send");
 
-send.addEventListener("click", () => renderUserMessage());
+let isEmailMode = false;
 
-txtInput.addEventListener("keyup", (event) => {
-  if (event.keyCode === 13) {
-    renderUserMessage();
+
+send.addEventListener("click", () => {
+  if (!isEmailMode) handleUserMessage();
+});
+
+txtInput.addEventListener("keyup", (e) => {
+  if (e.key === "Enter" && !isEmailMode) {
+    handleUserMessage();
   }
 });
 
-const renderUserMessage = () => {
-  const userInput = txtInput.value;
-  renderMessageEle(userInput, "user");
+function handleUserMessage() {
+  const text = txtInput.value.trim();
+  if (!text) return;
+
+  addMessage(text, "user");
   txtInput.value = "";
+
   setTimeout(() => {
-    renderChatbotResponse(userInput);
-    setScrollPosition();
-  }, 600);
-};
+    const res = responseObj[text] || "Please try something else";
+    addMessage(res);
+    scrollToBottom();
+  }, 500);
+}
 
-const renderChatbotResponse = (userInput) => {
-  const res = getChatbotResponse(userInput);
-  renderMessageEle(res);
-};
+function addMessage(text, type = "bot") {
+  const div = document.createElement("div");
+  div.className = type === "user" ? "user-message" : "chatbot-message";
+  div.textContent = text;
+  chatBody.append(div);
+}
 
-const renderMessageEle = (txt, type) => {
-  let className = "user-message";
-  if (type !== "user") {
-    className = "chatbot-message";
-  }
-  const messageEle = document.createElement("div");
-  const txtNode = document.createTextNode(txt);
-  messageEle.classList.add(className);
-  messageEle.append(txtNode);
-  chatBody.append(messageEle);
-};
+function scrollToBottom() {
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
 
-const getChatbotResponse = (userInput) => {
-  return responseObj[userInput] == undefined
-    ? "Please try something else"
-    : responseObj[userInput];
-};
-
-const setScrollPosition = () => {
-  if (chatBody.scrollHeight > 0) {
-    chatBody.scrollTop = chatBody.scrollHeight;
-  }
-};
-
-const renderWelcomeMessage = () => {
+function renderWelcome() {
   const wrapper = document.createElement("div");
-  wrapper.classList.add("chatbot-message", "welcome-wrapper");
+  wrapper.className = "chatbot-message welcome-wrapper";
 
-  const text = document.createTextNode("Hi! How can I help you today?");
-  wrapper.append(text);
+  wrapper.append("Hi! How can I help you today?");
 
-  const recommended = document.createElement("span");
-  recommended.classList.add("recommended-label");
-  recommended.textContent = "Recommended";
-  wrapper.append(recommended);
+  const label = document.createElement("span");
+  label.className = "recommended-label";
+  label.textContent = "Recommended";
 
   const btn = document.createElement("button");
-  btn.classList.add("option-btn");
+  btn.className = "option-btn";
   btn.textContent = "Receive notifications";
-  btn.addEventListener("click", () => {
-    // funcionalidad próxima
-  });
 
+  btn.onclick = () => {
+    btn.remove();
+    label.remove();
+    startEmailFlow();
+  };
+
+  wrapper.append(label);
   wrapper.append(btn);
   chatBody.append(wrapper);
-};
+}
 
-renderWelcomeMessage();
+renderWelcome();
+
+function startEmailFlow() {
+  isEmailMode = true;
+
+  addMessage("Please enter your email:");
+  txtInput.placeholder = "your@email.com";
+  txtInput.focus();
+
+  const submitEmail = async () => {
+    const email = txtInput.value.trim();
+
+    // mail validacion
+    if (!email.includes("@") || !email.includes(".")) {
+      addMessage("Invalid email. Try again.");
+      return;
+    }
+
+    addMessage(email, "user");
+    txtInput.value = "";
+
+    addMessage("Sending... ⏳");
+
+    try {
+      await emailjs.send(
+        "service_2fc5v5k",           // sacado de la pag
+        "template_d3d70zp",          // sacado de la pag
+        {
+          user_email: email
+        }
+      );
+
+      chatBody.lastChild.remove();
+      addMessage("TEST Email sent");
+
+    } catch (error) {
+      chatBody.lastChild.remove();
+      addMessage("Failed to send");
+      console.error(error);
+    }
+
+    isEmailMode = false;
+
+    send.removeEventListener("click", sendHandler);
+    txtInput.removeEventListener("keyup", enterHandler);
+  };
+
+  const sendHandler = () => submitEmail();
+
+  const enterHandler = (e) => {
+    if (e.key === "Enter") submitEmail();
+  };
+
+  send.addEventListener("click", sendHandler);
+  txtInput.addEventListener("keyup", enterHandler);
+}

@@ -3,4 +3,6 @@ const responseObj = {
   hey: "Hey! What's Up",
   today: new Date().toDateString(),
   time: new Date().toLocaleTimeString(),
+  ping: "Pong",
+  
 };
