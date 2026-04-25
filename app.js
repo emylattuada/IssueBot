@@ -93,7 +93,8 @@ function startEmailFlow() {
         "service_2fc5v5k",           // sacado de la pag
         "template_d3d70zp",          // sacado de la pag
         {
-          user_email: email
+          user_email: email,
+          user: "test"
         }
       );
 
