@@ -1,9 +1,30 @@
+// ── NUEVO: selectores del widget flotante ──
+const bubble = document.getElementById("chatBubble");
+const container = document.getElementById("chatContainer");
+const minimizeBtn = document.getElementById("minimizeBtn");
+
+let isOpen = false;
+let welcomeRendered = false;
+
+function toggleChat() {
+  isOpen = !isOpen;
+  container.classList.toggle("open", isOpen);
+  bubble.classList.toggle("open", isOpen);
+  if (isOpen && !welcomeRendered) {
+    renderWelcome();
+    welcomeRendered = true;
+  }
+  if (isOpen) setTimeout(() => txtInput.focus(), 260);
+}
+
+bubble.addEventListener("click", toggleChat);
+minimizeBtn.addEventListener("click", toggleChat);
+
 const chatBody = document.querySelector(".chat-body");
 const txtInput = document.querySelector("#txtInput");
 const send = document.querySelector(".send");
 
 let isEmailMode = false;
-
 
 send.addEventListener("click", () => {
   if (!isEmailMode) handleUserMessage();
@@ -64,8 +85,6 @@ function renderWelcome() {
   wrapper.append(btn);
   chatBody.append(wrapper);
 }
-
-renderWelcome();
 
 function startEmailFlow() {
   isEmailMode = true;
