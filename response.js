@@ -4,5 +4,6 @@ const responseObj = {
   today: new Date().toDateString(),
   time: new Date().toLocaleTimeString(),
   ping: "Pong",
-   rn: () => startEmailFlow(),
+  rn: () => startEmailFlow(),
+  about: "My role is increase website traffic",
 };

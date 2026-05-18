@@ -123,7 +123,7 @@ function startEmailFlow() {
       );
 
       chatBody.lastChild.remove();
-      addMessage("TEST Email sent");
+      addMessage("Email sent");
 
     } catch (error) {
       chatBody.lastChild.remove();
