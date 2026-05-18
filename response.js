@@ -4,5 +4,5 @@ const responseObj = {
   today: new Date().toDateString(),
   time: new Date().toLocaleTimeString(),
   ping: "Pong",
-  
+   rn: () => startEmailFlow(),
 };

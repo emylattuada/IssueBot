@@ -1,4 +1,3 @@
-// ── NUEVO: selectores del widget flotante ──
 const bubble = document.getElementById("chatBubble");
 const container = document.getElementById("chatContainer");
 const minimizeBtn = document.getElementById("minimizeBtn");
@@ -44,8 +43,14 @@ function handleUserMessage() {
   txtInput.value = "";
 
   setTimeout(() => {
-    const res = responseObj[text] || "Please try something else";
-    addMessage(res);
+    const res = responseObj[text.toLowerCase()];
+
+    if (typeof res === "function") {
+      res();                          // ejecuta startEmailFlow()
+    } else {
+      addMessage(res || "Please try something else");
+    }
+
     scrollToBottom();
   }, 500);
 }
