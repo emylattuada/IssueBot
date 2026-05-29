@@ -114,8 +114,8 @@ function startEmailFlow() {
 
     try {
       await emailjs.send(
-        "service_2fc5v5k",           // sacado de la pag
-        "template_d3d70zp",          // sacado de la pag
+        "YOUR_SERVICE",           // sacado de la pag
+        "YOUR_TEMPLATE",          // sacado de la pag
         {
           user_email: email,
           user: "test"
